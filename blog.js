@@ -5,7 +5,7 @@ class Blog{
     author;
     createdAt;
 
-    constructor(id,title,content,author,createdAt){
+    constructor(id,title,content,author){
         if(!id||!title||!content||!author){
             throw new Error("All flieds are required");
         }
@@ -19,6 +19,15 @@ class Blog{
     getId(){
         return this.#id;
     }
+    toJSON() {
+    return {
+      id: this.#id,
+      title: this.title,
+      content: this.content,
+      author: this.author,
+      createdAt: this.createdAt
+    };
+  }
 
 }
 class BlogManager{
@@ -29,10 +38,10 @@ class BlogManager{
         }
         this.#posts.push(Blogpost);
     }
-  getAllposts(){
-    return this.#posts;
+  getAllPosts(){
+    return this.#posts.map(post => post.toJSON());
   }
-   FindpostById(id){
+   FindPostById(id){
 
     return this.#posts.find(post=>post.getId()===id);
    }
@@ -58,8 +67,8 @@ try {
 manager.addPost(P1);
 manager.addPost(P2);
 manager.addPost(P3);
-console.log("All Posts:", manager.getAllposts());
-console.log("Post with ID 1:", manager.FindpostById(1));
+console.log("All Posts:", manager.getAllPosts());
+console.log("Post with ID 2:", manager.FindPostById(2));
 console.log("Posts by Serge:", manager.FilterPostsByAuthor("Serge"));
 console.log("Posts containing 'content':", manager.FilterPostsByKeyword("content"));
 console.log("Recent Posts (limit 2):", manager.getRecentposts(2));
